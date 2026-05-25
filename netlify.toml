@@ -1,10 +1,12 @@
 [build]
-command = "cd frontend && npm install && npm run build"
-publish = "frontend/dist"
+base = "frontend"
+command = "npm run build"
+publish = "dist"
+functions = "functions"
 
 [[redirects]]
 from = "/api/*"
-to = "https://progress-tracker-backend.onrender.com/api/:splat"
+to = "https://zenpt-api.onrender.com/api/:splat"
 status = 200
 
 [[redirects]]
@@ -14,12 +16,9 @@ status = 200
 
 [env.production]
   [env.production.build.environment]
-    VITE_API_URL = "https://progress-tracker-backend.onrender.com"
-
-[env.preview]
-  [env.preview.build.environment]
-    VITE_API_URL = "http://localhost:5000"
+    VITE_API_URL = "https://zenpt-api.onrender.com"
+    NODE_ENV = "production"
 
 [context.deploy-preview]
-  command = "cd frontend && npm install && npm run build"
-  publish = "frontend/dist"
+  [context.deploy-preview.environment]
+    VITE_API_URL = "https://zenpt-api.onrender.com"
