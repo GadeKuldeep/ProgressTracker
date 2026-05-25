@@ -45,25 +45,23 @@ const AuthModal = ({ onClose }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Frosted glass backdrop */}
-      <div
-        className="absolute inset-0 bg-[#1a1a1a]/40 backdrop-blur-md"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-[#1a1a1a]/55 backdrop-blur-md"
         onClick={onClose}
       />
 
       {/* Floating Modal Panel */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="relative zen-card w-full max-w-[390px] p-8 md:p-10 border border-white/60 bg-[#fafaf7]/85 backdrop-blur-lg shadow-2xl overflow-hidden"
+        exit={{ opacity: 0, scale: 0.9, y: 30 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+        className="relative zen-card w-full max-w-[390px] p-8 md:p-10 border border-white/60 bg-[#fafaf7]/90 backdrop-blur-lg shadow-2xl overflow-hidden z-10"
       >
         {/* Background Watermark - Harmony (和) */}
         <div className="zen-watermark font-serif">和</div>
@@ -71,7 +69,7 @@ const AuthModal = ({ onClose }) => {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zen-400 hover:text-accent transition-colors cursor-pointer p-1"
+          className="absolute top-4 right-4 text-zen-400 hover:text-accent transition-colors cursor-pointer p-1 rounded-full hover:bg-black/5"
           id="auth-close-btn"
         >
           <HiOutlineX className="w-5 h-5" />
@@ -82,13 +80,13 @@ const AuthModal = ({ onClose }) => {
           <h2 className="text-xl font-semibold text-zen-800 font-serif tracking-wider">
             {isLogin ? 'Sign In' : 'Create Account'}
           </h2>
-          <p className="text-[10px] text-accent uppercase tracking-widest font-bold font-sans mt-0.5">
+          <p className="text-[10px] text-accent uppercase tracking-widest font-bold font-sans mt-1">
             {isLogin ? '心をつなぐ · Continue Your Path' : '新たな一歩 · Begin Your Journey'}
           </p>
         </div>
 
         {/* Inputs form */}
-        <form onSubmit={handleSubmit} className="space-y-4 z-10 relative">
+        <form onSubmit={handleSubmit} className="space-y-4.5 z-10 relative">
           <AnimatePresence mode="wait">
             {!isLogin && (
               <motion.div
@@ -102,7 +100,7 @@ const AuthModal = ({ onClose }) => {
                   placeholder="Your Name"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="zen-input"
+                  className="zen-input bg-white/50 focus:bg-white"
                   required={!isLogin}
                   id="auth-name"
                   autoFocus
@@ -116,7 +114,7 @@ const AuthModal = ({ onClose }) => {
             placeholder="Email Address"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="zen-input"
+            className="zen-input bg-white/50 focus:bg-white"
             required
             id="auth-email"
           />
@@ -126,7 +124,7 @@ const AuthModal = ({ onClose }) => {
             placeholder="Password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            className="zen-input"
+            className="zen-input bg-white/50 focus:bg-white"
             required
             minLength={6}
             id="auth-password"
@@ -135,14 +133,15 @@ const AuthModal = ({ onClose }) => {
           <button
             type="submit"
             disabled={loading}
-            className="zen-btn zen-btn-primary w-full py-3 text-sm font-semibold tracking-wider mt-2.5"
+            className="zen-btn zen-btn-primary w-full py-3 text-sm font-semibold tracking-wider mt-2 hover:scale-102 flex items-center justify-center cursor-pointer shadow-md"
+            style={{ minHeight: '44px' }}
             id="auth-submit"
           >
             {loading ? (
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className="w-5 h-5 border-2 border-[#fafaf7]/35 border-t-[#fafaf7] rounded-full"
+                className="w-5 h-5 border-2 border-white/35 border-t-white rounded-full"
               />
             ) : (
               isLogin ? 'Enter calm space' : 'Initiate presence'
@@ -161,7 +160,7 @@ const AuthModal = ({ onClose }) => {
           </button>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

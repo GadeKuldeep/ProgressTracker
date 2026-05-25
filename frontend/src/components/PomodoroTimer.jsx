@@ -5,17 +5,42 @@ import toast from 'react-hot-toast';
 import { HiOutlinePlay, HiOutlinePause, HiOutlineRefresh } from 'react-icons/hi';
 import { triggerSakuraRain } from './SakuraShower';
 
-const WORK_TIME = 25 * 60; // 25 minutes
-const SHORT_BREAK = 5 * 60; // 5 minutes
+const PRESETS = {
+  work: {
+    label: 'Focus',
+    seconds: 25 * 60,
+    subLabel: '集中時間 · Time to Focus',
+    colorStart: '#c0392b', // Vermillion
+    colorEnd: '#e74c3c',
+    glowColor: 'rgba(192, 57, 43, 0.4)'
+  },
+  short: {
+    label: 'Short Break',
+    seconds: 5 * 60,
+    subLabel: '息抜き · Time to Rest',
+    colorStart: '#7a9e7e', // Forest Green
+    colorEnd: '#a2c4a6',
+    glowColor: 'rgba(122, 158, 126, 0.4)'
+  },
+  long: {
+    label: 'Long Break',
+    seconds: 15 * 60,
+    subLabel: '長閑 · Deep Breath',
+    colorStart: '#2c3e50', // Slate Indigo
+    colorEnd: '#34495e',
+    glowColor: 'rgba(44, 62, 80, 0.4)'
+  }
+};
 
 const PomodoroTimer = ({ onComplete }) => {
-  const [timeLeft, setTimeLeft] = useState(WORK_TIME);
+  const [mode, setMode] = useState('work'); // 'work' | 'short' | 'long'
+  const [timeLeft, setTimeLeft] = useState(PRESETS.work.seconds);
   const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState('work'); // 'work' | 'break'
   const [sessionsToday, setSessionsToday] = useState(0);
   const intervalRef = useRef(null);
 
-  const totalTime = mode === 'work' ? WORK_TIME : SHORT_BREAK;
+  const currentPreset = PRESETS[mode];
+  const totalTime = currentPreset.seconds;
   const progress = ((totalTime - timeLeft) / totalTime) * 100;
 
   const formatTime = (seconds) => {
@@ -47,8 +72,10 @@ const PomodoroTimer = ({ onComplete }) => {
       } catch {
         toast.error('Failed to log session');
       }
-      setMode('break');
-      setTimeLeft(SHORT_BREAK);
+      // Suggest a break
+      const nextMode = (sessionsToday + 1) % 4 === 0 ? 'long' : 'short';
+      setMode(nextMode);
+      setTimeLeft(PRESETS[nextMode].seconds);
     } else {
       triggerSakuraRain(40);
       toast.success(
@@ -59,9 +86,9 @@ const PomodoroTimer = ({ onComplete }) => {
         { className: 'zen-toast' }
       );
       setMode('work');
-      setTimeLeft(WORK_TIME);
+      setTimeLeft(PRESETS.work.seconds);
     }
-  }, [mode, onComplete]);
+  }, [mode, onComplete, sessionsToday]);
 
   useEffect(() => {
     if (isRunning) {
@@ -85,13 +112,19 @@ const PomodoroTimer = ({ onComplete }) => {
   const resetTimer = () => {
     setIsRunning(false);
     if (intervalRef.current) clearInterval(intervalRef.current);
-    setMode('work');
-    setTimeLeft(WORK_TIME);
+    setTimeLeft(currentPreset.seconds);
+  };
+
+  const handlePresetSelect = (presetKey) => {
+    setIsRunning(false);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setMode(presetKey);
+    setTimeLeft(PRESETS[presetKey].seconds);
   };
 
   // SVG circle calculations
-  const size = 160;
-  const strokeWidth = 5;
+  const size = 166;
+  const strokeWidth = 5.5;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
@@ -101,46 +134,79 @@ const PomodoroTimer = ({ onComplete }) => {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 }}
-      className="zen-card-dark p-6 h-full flex flex-col items-center justify-between"
+      className="zen-card-dark p-6 h-full flex flex-col items-center justify-between min-h-[380px]"
       id="pomodoro-section"
     >
       {/* Background Watermark - Time (時) */}
       <div className="zen-watermark font-serif">時</div>
 
+      {/* Preset Selectors */}
+      <div className="flex gap-2 p-1 bg-white/5 border border-white/10 rounded-full z-10 w-full justify-around mb-2">
+        {Object.keys(PRESETS).map((key) => (
+          <button
+            key={key}
+            onClick={() => handlePresetSelect(key)}
+            className={`px-3 py-1 text-[10px] uppercase font-sans tracking-wider rounded-full transition-all cursor-pointer ${
+              mode === key
+                ? 'bg-white/15 text-[#fafaf7] font-semibold border border-white/20'
+                : 'text-zen-400 hover:text-[#fafaf7]'
+            }`}
+          >
+            {PRESETS[key].label}
+          </button>
+        ))}
+      </div>
+
       <div className="text-center w-full z-10">
         <h2 className="text-sm font-semibold text-[#fafaf7] uppercase tracking-widest font-serif">
-          {mode === 'work' ? 'Focus Session' : 'Breathe & Rest'}
+          {currentPreset.label}
         </h2>
         <p className="text-[10px] text-zen-400 font-serif italic mt-0.5">
-          {mode === 'work' ? '集中時間 · Time to Focus' : '息抜き · Time to rest'}
+          {currentPreset.subLabel}
         </p>
       </div>
 
       {/* Timer SVG circle */}
-      <div className="relative my-6 z-10" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="-rotate-90">
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.08)"
-            strokeWidth={strokeWidth}
-          />
-          <motion.circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={mode === 'work' ? '#c0392b' : '#7a9e7e'} // Vermillion for Focus, green for break
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            animate={{ strokeDashoffset: offset }}
-            transition={{ duration: 0.5, ease: 'linear' }}
-            className="shadow"
-          />
-        </svg>
+      <div className="relative my-4 z-10" style={{ width: size, height: size }}>
+        <motion.div
+          animate={isRunning ? { scale: [1, 1.015, 1] } : {}}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute inset-0"
+        >
+          <svg width={size} height={size} className="-rotate-90">
+            <defs>
+              <linearGradient id={`gradient-${mode}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={currentPreset.colorStart} />
+                <stop offset="100%" stopColor={currentPreset.colorEnd} />
+              </linearGradient>
+            </defs>
+            {/* Background circle track */}
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.04)"
+              strokeWidth={strokeWidth}
+            />
+            {/* Foreground animated progress circle */}
+            <motion.circle
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke={`url(#gradient-${mode})`}
+              strokeWidth={strokeWidth}
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              animate={{ strokeDashoffset: offset }}
+              style={{
+                filter: `drop-shadow(0px 0px 5px ${currentPreset.glowColor})`
+              }}
+              transition={{ duration: 0.5, ease: 'linear' }}
+            />
+          </svg>
+        </motion.div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-3xl font-light text-[#fafaf7] tracking-widest font-sans">
@@ -157,7 +223,7 @@ const PomodoroTimer = ({ onComplete }) => {
         {/* Reset button */}
         <button
           onClick={resetTimer}
-          className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-zen-400 hover:text-[#fafaf7] hover:border-white/30 transition-all cursor-pointer"
+          className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-zen-400 hover:text-[#fafaf7] hover:border-white/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
           title="Reset"
           id="pomodoro-reset"
         >
@@ -167,7 +233,11 @@ const PomodoroTimer = ({ onComplete }) => {
         {/* Play/Pause toggle */}
         <button
           onClick={toggleTimer}
-          className="w-12 h-12 rounded-full bg-[#c9a84c] text-[#1a1a1a] flex items-center justify-center hover:bg-[#c0392b] hover:text-white transition-all shadow-md cursor-pointer hover:scale-105"
+          className="w-12 h-12 rounded-full bg-[#c9a84c] text-[#1a1a1a] flex items-center justify-center hover:text-white transition-all shadow-md cursor-pointer hover:scale-108 active:scale-95"
+          style={{
+            backgroundColor: isRunning ? '#c0392b' : '#c9a84c',
+            boxShadow: `0 4px 14px ${isRunning ? 'rgba(192, 57, 43, 0.4)' : 'rgba(201, 168, 76, 0.3)'}`
+          }}
           id="pomodoro-toggle"
         >
           {isRunning ? (
@@ -187,7 +257,7 @@ const PomodoroTimer = ({ onComplete }) => {
       </div>
 
       {/* Bottom text */}
-      <div className="text-center mt-3 z-10">
+      <div className="text-center mt-2 z-10">
         <p className="text-[10px] text-zen-500 uppercase tracking-widest font-sans">
           Completed Sessions
         </p>

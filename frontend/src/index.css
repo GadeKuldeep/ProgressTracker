@@ -38,26 +38,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
   overflow-x: hidden;
-  background-color: #1a1a1a; /* Base dark background under images */
+  background-color: #1a1a1a;
 }
 
 /* Elegant scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(201, 168, 76, 0.3);
+  background: rgba(201, 168, 76, 0.25);
   border-radius: 100px;
+  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(192, 57, 43, 0.6);
+  background: rgba(192, 57, 43, 0.5);
 }
 
 /* ===== Ken Burns & Background Animations ===== */
@@ -74,25 +75,28 @@ body {
 }
 
 .ken-burns-image {
-  width: 105%;
-  height: 105%;
+  width: 110%;
+  height: 110%;
   object-fit: cover;
   position: absolute;
-  top: -2.5%;
-  left: -2.5%;
-  filter: brightness(0.9);
-  animation: kenburns 45s ease-in-out infinite alternate;
+  top: -5%;
+  left: -5%;
+  filter: brightness(0.82) saturate(1.1);
+  animation: kenburns 50s ease-in-out infinite alternate;
 }
 
 @keyframes kenburns {
   0% {
     transform: scale(1) translate(0, 0);
   }
-  50% {
-    transform: scale(1.06) translate(1%, -1%);
+  33% {
+    transform: scale(1.06) translate(1.5%, -1.5%);
+  }
+  66% {
+    transform: scale(1.04) translate(-1%, 0.5%);
   }
   100% {
-    transform: scale(1.02) translate(-0.5%, 0.5%);
+    transform: scale(1.08) translate(0.5%, 1%);
   }
 }
 
@@ -112,47 +116,82 @@ body {
 /* ===== Premium Shoji Floating Glass Glassmorphism Cards ===== */
 .zen-card {
   position: relative;
-  background: rgba(250, 250, 247, 0.68); /* Floating rice paper translucent */
-  backdrop-filter: blur(14px) saturate(125%);
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03), 
-              inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(250, 250, 247, 0.72);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
+.zen-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+}
+
 .zen-card:hover {
-  transform: translateY(-4px);
-  background: rgba(250, 250, 247, 0.74);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 12px 35px rgba(26, 26, 26, 0.08), 
-              inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transform: translateY(-5px);
+  background: rgba(250, 250, 247, 0.78);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 20px 50px rgba(26, 26, 26, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 /* Dark Glassmorphism card for Focus / Pomodoro */
 .zen-card-dark {
-  background: rgba(26, 26, 26, 0.76); /* Ink black frosted */
-  backdrop-filter: blur(16px) saturate(110%);
-  -webkit-backdrop-filter: blur(16px) saturate(110%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 18, 16, 0.82);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fafaf7;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.zen-card-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  pointer-events: none;
 }
 
 .zen-card-dark:hover {
-  transform: translateY(-4px);
-  background: rgba(26, 26, 26, 0.82);
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transform: translateY(-5px);
+  background: rgba(24, 22, 20, 0.86);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 24px 55px rgba(0, 0, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Accent lines */
 .quote-card-accent {
-  border-left: 3px solid #c0392b !important; /* Vermillion accent */
+  border-left: 3px solid #c0392b !important;
 }
 
 /* Low-opacity background watermarks */
@@ -164,7 +203,7 @@ body {
   font-size: 110px;
   font-weight: 700;
   color: #1a1a1a;
-  opacity: 0.04;
+  opacity: 0.035;
   pointer-events: none;
   user-select: none;
   z-index: 0;
@@ -174,73 +213,102 @@ body {
 
 .zen-card-dark .zen-watermark {
   color: #fafaf7;
-  opacity: 0.035;
+  opacity: 0.03;
+}
+
+/* ===== Skeleton Loading Animation ===== */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(168, 159, 145, 0.1) 25%,
+    rgba(201, 168, 76, 0.08) 50%,
+    rgba(168, 159, 145, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ===== Elegant Shoji Grid & Checkboxes ===== */
 .shoji-checkbox {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #a89f91;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.5);
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid rgba(168, 159, 145, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.04);
 }
 
 .shoji-checkbox:hover {
-  border-color: #c9a84c; /* Gold */
-  background: rgba(201, 168, 76, 0.08);
-  transform: scale(1.05);
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.1);
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12), inset 0 1px 2px rgba(0,0,0,0.03);
 }
 
 .shoji-checkbox.checked {
-  background: rgba(122, 158, 126, 0.15) !important; /* success-light */
-  border-color: #7a9e7e !important; /* green success */
-  box-shadow: 0 2px 8px rgba(122, 158, 126, 0.2);
+  background: rgba(122, 158, 126, 0.18) !important;
+  border-color: #7a9e7e !important;
+  box-shadow: 0 2px 8px rgba(122, 158, 126, 0.25), inset 0 1px 2px rgba(0,0,0,0.03);
 }
 
 /* ===== Modern Input Controls ===== */
 .zen-input {
   width: 100%;
   padding: 11px 15px;
-  border: 1px solid rgba(168, 159, 145, 0.3);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(168, 159, 145, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
   color: #1a1a1a;
   font-family: var(--font-sans);
   font-size: 13.5px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.zen-input::placeholder {
+  color: rgba(122, 112, 101, 0.55);
 }
 
 .zen-input:focus {
   outline: none;
   background: rgba(255, 255, 255, 0.95);
-  border-color: #c9a84c; /* Gold */
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.14), inset 0 1px 3px rgba(0,0,0,0.02);
+  transform: translateY(-1px);
 }
 
 .zen-input-dark {
   width: 100%;
   padding: 11px 15px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
   color: #fafaf7;
   font-family: var(--font-sans);
   font-size: 13.5px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zen-input-dark::placeholder {
+  color: rgba(250, 250, 247, 0.3);
 }
 
 .zen-input-dark:focus {
   outline: none;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.4);
   border-color: #c9a84c;
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.25);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2), inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 /* ===== Sleek Buttons ===== */
@@ -248,56 +316,66 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   padding: 9px 20px;
-  border: 1px solid rgba(168, 159, 145, 0.4);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid rgba(168, 159, 145, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
   color: #524b43;
   font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
 .zen-btn:hover {
   background: #fafaf7;
   color: #1a1a1a;
-  border-color: #c9a84c;
-  transform: translateY(-1px);
+  border-color: rgba(201, 168, 76, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.zen-btn:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .zen-btn-primary {
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2925 100%);
   color: #fafaf7;
-  border-color: #1a1a1a;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(26, 26, 26, 0.25), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .zen-btn-primary:hover {
-  background: #c0392b; /* Vermillion hover */
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
   color: #ffffff;
-  border-color: #c0392b;
-  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.25);
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(192, 57, 43, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .zen-btn-sm {
   padding: 6px 14px;
   font-size: 11.5px;
-  border-radius: 8px;
+  border-radius: 10px;
+  gap: 5px;
 }
 
 /* ===== Toast and UI custom styles ===== */
 .zen-toast {
-  background: rgba(26, 26, 26, 0.9) !important;
-  backdrop-filter: blur(10px) !important;
+  background: rgba(20, 18, 16, 0.95) !important;
+  backdrop-filter: blur(14px) !important;
   color: #fafaf7 !important;
-  border: 1px solid rgba(201, 168, 76, 0.2) !important;
+  border: 1px solid rgba(201, 168, 76, 0.25) !important;
   font-family: var(--font-sans) !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   font-size: 12.5px !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0,0,0,0.1) !important;
 }
 
 /* Subtle Ink-Brush Divider */
@@ -305,7 +383,7 @@ body {
   display: block;
   width: 100%;
   height: 18px;
-  opacity: 0.12;
+  opacity: 0.1;
   margin: 18px 0;
   stroke: #1a1a1a;
   fill: none;
@@ -313,7 +391,7 @@ body {
 
 .zen-card-dark .brush-divider {
   stroke: #fafaf7;
-  opacity: 0.08;
+  opacity: 0.07;
 }
 
 /* Proverb rotation fade effect */
@@ -323,25 +401,32 @@ body {
 
 /* Mood selector button */
 .mood-select-btn {
-  font-size: 20px;
-  padding: 8px;
-  border-radius: 10px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid transparent;
+  font-size: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.35);
+  border: 1.5px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .mood-select-btn:hover {
   background: rgba(255, 255, 255, 0.8);
-  transform: scale(1.1) translateY(-2px);
-  border-color: rgba(201, 168, 76, 0.3);
+  transform: scale(1.12) translateY(-2px);
+  border-color: rgba(201, 168, 76, 0.35);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .mood-select-btn.active {
   background: #fafaf7;
-  transform: scale(1.15) translateY(-2px);
+  transform: scale(1.18) translateY(-2px);
   border-color: #c9a84c;
-  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 6px 16px rgba(201, 168, 76, 0.2), 0 2px 4px rgba(0,0,0,0.06);
 }
 
 /* Circular slider styling for Three.js focus ring canvas container */
@@ -350,7 +435,7 @@ body {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,11 +445,11 @@ body {
 .three-canvas-container::after {
   content: '';
   position: absolute;
-  inset: -1px;
+  inset: -2px;
   border-radius: 50%;
-  border: 1px dashed rgba(201, 168, 76, 0.15);
+  border: 1px dashed rgba(201, 168, 76, 0.18);
   pointer-events: none;
-  animation: spinSlow 40s linear infinite;
+  animation: spinSlow 45s linear infinite;
 }
 
 @keyframes spinSlow {
@@ -377,24 +462,323 @@ input[type="range"].zen-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 4px;
-  background: rgba(168, 159, 145, 0.2);
+  height: 3px;
+  background: rgba(168, 159, 145, 0.18);
   border-radius: 2px;
   outline: none;
+  cursor: pointer;
 }
 
 input[type="range"].zen-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  background: #c0392b; /* Vermillion */
+  background: #c0392b;
   cursor: pointer;
-  transition: transform 0.15s ease;
-  box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 2px 6px rgba(192, 57, 43, 0.35);
 }
 
 input[type="range"].zen-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.3);
+  transform: scale(1.4);
+  box-shadow: 0 3px 10px rgba(192, 57, 43, 0.45);
+}
+
+/* ===== Gradient text utility ===== */
+.gradient-text-gold {
+  background: linear-gradient(135deg, #c9a84c 0%, #e8c96e 50%, #c0392b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Stat card mini styles ===== */
+.stat-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 12px 14px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(201, 168, 76, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+/* ===== Pulse glow for running timer ===== */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
+  50% { box-shadow: 0 0 0 8px rgba(192, 57, 43, 0.12); }
+}
+
+.timer-running {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Green pulse for break mode */
+@keyframes pulseGlowGreen {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(122, 158, 126, 0); }
+  50% { box-shadow: 0 0 0 8px rgba(122, 158, 126, 0.15); }
+}
+
+.timer-running-break {
+  animation: pulseGlowGreen 3s ease-in-out infinite;
+}
+
+/* ===== Session dot indicators ===== */
+.session-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.session-dot.filled {
+  background: #c9a84c;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.5);
+}
+
+.session-dot.empty {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ===== Quote progress dots ===== */
+.quote-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.quote-dot.active {
+  background: #c0392b;
+  width: 16px;
+  border-radius: 3px;
+}
+
+.quote-dot.inactive {
+  background: rgba(168, 159, 145, 0.35);
+}
+
+/* ===== Streak badge ===== */
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.18) 0%, rgba(201,168,76,0.08) 100%);
+  border: 1px solid rgba(201,168,76,0.3);
+  font-size: 10px;
+  font-weight: 700;
+  color: #8a7035;
+  letter-spacing: 0.02em;
+}
+
+/* ===== Tag / Category badge ===== */
+.zen-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ===== Floating action button style ===== */
+.fab-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  background: rgba(250, 250, 247, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.fab-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.95);
+  border-color: rgba(201, 168, 76, 0.4);
+}
+
+/* ===== Smooth section entrance animations ===== */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ===== Micro-interaction: tap highlight ===== */
+.tap-highlight {
+  -webkit-tap-highlight-color: rgba(201, 168, 76, 0.1);
+}
+
+/* ===== Section label style ===== */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+/* ===== Number display ===== */
+.metric-number {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+}
+
+/* ===== Empty state ===== */
+.empty-state-icon {
+  opacity: 0.3;
+  margin-bottom: 12px;
+}
+
+/* ===== Glow effects for dark card ===== */
+.gold-glow {
+  filter: drop-shadow(0 0 8px rgba(201, 168, 76, 0.4));
+}
+
+/* ===== Heatmap cell hover ===== */
+.heatmap-cell {
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.25);
+  filter: brightness(1.2);
+  z-index: 10;
+}
+
+/* ===== Progress bar animated fill ===== */
+.progress-bar-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmerBar 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmerBar {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ===== Divider gradient ===== */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168,159,145,0.3), transparent);
+  border: none;
+}
+
+/* ===== Background selector pill ===== */
+.bg-option-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.bg-option-pill.active {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2925 100%);
+  color: #fafaf7;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(26,26,26,0.2);
+}
+
+.bg-option-pill:not(.active):hover {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(201,168,76,0.2);
+}
+
+/* ===== Card inner panel ===== */
+.inner-panel {
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 1px 4px rgba(0,0,0,0.03);
+}
+
+/* ===== Breathing animation for running timer ===== */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+.breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* ===== Mode pill tabs ===== */
+.mode-pill {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+}
+
+.mode-pill.active-work {
+  background: rgba(192, 57, 43, 0.15);
+  border-color: rgba(192, 57, 43, 0.3);
+  color: #c0392b;
+}
+
+.mode-pill.active-break {
+  background: rgba(122, 158, 126, 0.15);
+  border-color: rgba(122, 158, 126, 0.3);
+  color: #7a9e7e;
+}
+
+.mode-pill.inactive {
+  color: rgba(250, 250, 247, 0.3);
 }
