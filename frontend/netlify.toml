@@ -1,0 +1,18 @@
+[build]
+command = "npm run build"
+publish = "dist"
+functions = "functions"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+[context.production.environment]
+VITE_API_URL = "https://zen-progress-tracker-api.onrender.com"
+
+[context.deploy-preview.environment]
+VITE_API_URL = "http://localhost:5000"
+
+[context.branch-deploy.environment]
+VITE_API_URL = "http://localhost:5000"

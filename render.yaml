@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: progress-tracker-backend
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: MONGODB_URI
+        scope: build
+      - key: JWT_SECRET
+        scope: build
+      - key: CLIENT_URL
+        value: https://progress-tracker-frontend.netlify.app
+        scope: build
+      - key: NODE_ENV
+        value: production
+        scope: build
+      - key: PORT
+        value: 5000
+        scope: build
+
+  - type: static_site
+    name: progress-tracker-frontend
+    staticPublishPath: frontend/dist
+    buildCommand: cd frontend && npm install && npm run build
+    envVars:
+      - key: VITE_API_URL
+        value: https://progress-tracker-backend.onrender.com
+        scope: build
