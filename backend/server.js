@@ -19,8 +19,14 @@ const limiter = rateLimit({
 });
 
 // Middleware
+// Prepare allowed origins, stripping trailing slashes to prevent CORS mismatches
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173'
+].filter(Boolean).map(url => url.replace(/\/$/, ''));
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
