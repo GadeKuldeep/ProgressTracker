@@ -21,4 +21,4 @@ status = 200
 
 [context.deploy-preview]
   [context.deploy-preview.environment]
-    VITE_API_URL = "https://zenpt-api.onrender.com"
+    VITE_API_URL = "https://progress-tracker-backend-zwwy.onrender.com"

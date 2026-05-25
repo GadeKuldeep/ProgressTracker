@@ -9,7 +9,7 @@ to = "/index.html"
 status = 200
 
 [context.production.environment]
-VITE_API_URL = "https://zen-progress-tracker-api.onrender.com"
+VITE_API_URL = "https://progress-tracker-backend-zwwy.onrender.com"
 
 [context.deploy-preview.environment]
 VITE_API_URL = "http://localhost:5000"
