@@ -11,7 +11,7 @@ services:
       - key: JWT_SECRET
         scope: build
       - key: CLIENT_URL
-        value: https://zenpt.netlify.app
+        value: https://zenpt.netlify.app/
         scope: build
       - key: NODE_ENV
         value: production

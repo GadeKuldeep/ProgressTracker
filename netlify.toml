@@ -6,7 +6,7 @@ functions = "functions"
 
 [[redirects]]
 from = "/api/*"
-to = "https://zenpt-api.onrender.com/api/:splat"
+to = "https://progress-tracker-backend-zwwy.onrender.com/api/:splat"
 status = 200
 
 [[redirects]]
@@ -16,7 +16,7 @@ status = 200
 
 [env.production]
   [env.production.build.environment]
-    VITE_API_URL = "https://zenpt-api.onrender.com"
+    VITE_API_URL = "https://progress-tracker-backend-zwwy.onrender.com"
     NODE_ENV = "production"
 
 [context.deploy-preview]
